@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class BaseActivity extends AppCompatActivity {
     //**************** Android M Permission (Android 6.0权限控制代码封装)
+    int i =0;
     private int permissionRequestCode = 88;
     private PermissionCallback permissionRunnable;
 

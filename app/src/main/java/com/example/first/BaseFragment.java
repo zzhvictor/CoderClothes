@@ -14,6 +14,7 @@ import android.widget.Toast;
  */
 
 public class BaseFragment extends Fragment {
+    int i = 0;
     private int permissionRequestCode = 88;
     private BaseFragment.PermissionCallback permissionRunnable;
 
