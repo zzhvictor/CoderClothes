@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.first.MainActivity"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:id="@+id/fragmentContain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/homePageBtn"
+            style="@style/main_tab_style"
+            android:checked="true"
+            android:drawableTop="@drawable/homepagebtnsetting"/>
+
+        <RadioButton
+            android:id="@+id/searchBtn"
+            style="@style/main_tab_style"
+            android:drawableTop="@drawable/searchbtnsetting" />
+
+        <RadioButton
+            android:id="@+id/releaseBtn"
+            style="@style/main_tab_style"
+            android:drawableTop="@drawable/releasebtnsetting"/>
+
+        <RadioButton
+            android:id="@+id/personalBtn"
+            style="@style/main_tab_style"
+            android:drawableTop="@drawable/personalbtnsetting"/>
+    </RadioGroup>
+
+
+</LinearLayout>
