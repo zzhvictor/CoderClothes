@@ -54,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/passWordEditText"
+            android:inputType="textPassword"
             android:layout_weight="0.27" />
     </LinearLayout>
 
@@ -63,7 +64,7 @@
         android:gravity="center"
         android:weightSum="1"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="60dp">
 
         <TextView
             android:id="@+id/textView2"
@@ -97,8 +98,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="10dp">
+        android:gravity="center">
 
         <Button
             android:id="@+id/loginBtn"

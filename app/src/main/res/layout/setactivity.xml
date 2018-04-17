@@ -39,7 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/passWordEditText"
-            android:layout_weight="0.27" />
+            android:layout_weight="0.27"
+            android:inputType="textPassword"/>
     </LinearLayout>
 
 
@@ -51,10 +52,11 @@
         android:layout_marginBottom="10dp">
 
         <Button
-            android:id="@+id/loginBtn"
+            android:id="@+id/submitBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/submitbtnsetting"/>
+            android:background="@drawable/submitbtnsetting"
+            android:onClick="submit"/>
 
 
     </LinearLayout>

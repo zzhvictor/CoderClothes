@@ -79,9 +79,7 @@ public class personalFragment extends Fragment {
         setBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(),SetActivity.class);
-                startActivity(intent);
+                startActivityForResult(new Intent(getContext(),SetActivity.class),1);
             }
         });
 

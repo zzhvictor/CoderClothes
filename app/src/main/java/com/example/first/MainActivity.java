@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 
 public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener {
@@ -46,6 +47,17 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode){
+            case 1:
+                Toast.makeText(getApplicationContext(),"修改成功，请重新登录",Toast.LENGTH_SHORT).show();
+                this.finish();
+                break;
+        }
+    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {

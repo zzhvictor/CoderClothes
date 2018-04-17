@@ -14,6 +14,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.example.first.Application.CCApplication;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -33,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private CheckBox cb_js,cb_ea,cb_vint,cb_off;
     private Button btn_login;
     private Button btn_register;
+    private CCApplication mCC;
 
     private Handler mHandler = new Handler(){
         @Override
@@ -40,12 +45,20 @@ public class LoginActivity extends AppCompatActivity {
             super.handleMessage(msg);
             switch (msg.what){
                 case EXCUTE_OK:
-                    if(msg.obj.toString().equals("login success")){
-                        Toast.makeText(getApplicationContext(),"登录成功",Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                    }else {
-                        Toast.makeText(getApplicationContext(),"登录失败",Toast.LENGTH_SHORT).show();
+                    JSONObject obj = (JSONObject) msg.obj;
+                    String status = obj.getString("status");
+                    switch (status){
+                        case "ok":
+                            mCC = (CCApplication) getApplicationContext();
+                            mCC.setUserId(obj.getIntValue("userId"));
+                            mCC.setUserName(obj.getString("userName"));
+                            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                            break;
+                        case "error":
+                            Toast.makeText(LoginActivity.this,"用户名或密码错误",Toast.LENGTH_SHORT).show();
+                            break;
                     }
+                    break;
             }
         }
     };
@@ -70,6 +83,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(View view){
+
+
         final String str_url = "http://192.168.80.1:8080/loginCheck?userName="+et_userName.getText().toString()+
                 "&passWord="+et_passWord.getText().toString();
         new Thread(){
@@ -90,12 +105,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     String result = baos.toString();
                     baos.close();
+                    JSONObject json= (JSONObject) JSONObject.parse(result);
                     Message msg = Message.obtain();
                     msg.what = EXCUTE_OK;
-                    msg.obj = result;
-                    System.out.println(result);
+                    msg.obj = json;
                     mHandler.sendMessage(msg);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -104,39 +118,46 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void register(View view){
-        final String str_url = "http://192.168.80.1:8080/registerCheck?userName="+et_userName.getText().toString()+
-                "&passWord="+et_passWord.getText().toString()+"&jsInterest="+cb_js.isChecked()+"&eaInterest="+cb_ea.isChecked()+"&vintInterest="+cb_vint.isChecked()+"&offInterest="+cb_off.isChecked();
-        new Thread(){
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    URL url = new URL(str_url);
-                    HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-                    urlConn.setConnectTimeout(5000);
-                    urlConn.setRequestMethod("GET");
-                    InputStream ins = urlConn.getInputStream();
-                    byte[] bytes = new byte[1024];
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    int len = 0;
-                    while ((len = ins.read(bytes))!=-1){
-                        baos.write(bytes,0,len);
-                    }
-                     final String result = baos.toString();
-                    /**
-                     * 在UI线程里运行吐司
-                     */
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
-                        }
-                    });
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if((!et_userName.getText().toString().equals("")&& !et_passWord.getText().toString().equals(""))&& (cb_js.isChecked()==true || cb_ea.isChecked()==true || cb_vint.isChecked()==true || cb_off.isChecked()==true)){
+            final String str_url = "http://192.168.80.1:8080/registerCheck?userName="+et_userName.getText().toString()+
+                    "&passWord="+et_passWord.getText().toString()+"&jsInterest="+cb_js.isChecked()+"&eaInterest="+cb_ea.isChecked()+"&vintInterest="+cb_vint.isChecked()+"&offInterest="+cb_off.isChecked();
+            new Thread(){
+                @Override
+                public void run() {
+                    super.run();
+                    try {
+                        URL url = new URL(str_url);
+                        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+                        urlConn.setConnectTimeout(5000);
+                        urlConn.setRequestMethod("GET");
+                        InputStream ins = urlConn.getInputStream();
+                        byte[] bytes = new byte[1024];
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        int len = 0;
+                        while ((len = ins.read(bytes))!=-1){
+                            baos.write(bytes,0,len);
+                        }
+                        final String result = baos.toString();
+                        /**
+                         * 在UI线程里运行吐司
+                         */
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }.start();
+            }.start();
+        }else{
+            Toast.makeText(getApplication(),"请填写完整的用户信息哦",Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 }
